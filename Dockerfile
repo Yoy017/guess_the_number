@@ -1,20 +1,14 @@
 # Use an official OpenJDK runtime as a parent image
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:21-jre
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
-
-# Compile the application
-RUN javac -d out src/main/java/ch/heigvd/dai/*.java src/main/java/ch/heigvd/dai/commands/*.java
-
-# Set the classpath to include the compiled classes
-ENV CLASSPATH /app/out
+# Copy the JAR file into the container at /app
+COPY target/java-tcp-programming-1.0-SNAPSHOT.jar /app/java-tcp-programming-1.0-SNAPSHOT.jar
 
 # Start the server
-CMD ["java", "-jar", "target/java-tcp-programming-1.0-SNAPSHOT.jar", "server"]
+ENTRYPOINT ["java", "-jar", "/app/java-tcp-programming-1.0-SNAPSHOT.jar", "server"]
 
-# Start the game (client processed)
-CMD ["java", "-jar", "target/java-tcp-programming-1.0-SNAPSHOT.jar", "client", "--host", "localhost"]
+# Launch the game process (client side)
+CMD ["java", "-jar", "/app/java-tcp-programming-1.0-SNAPSHOT.jar", "client", "-H", "localhost"]
