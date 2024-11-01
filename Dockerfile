@@ -13,5 +13,8 @@ RUN javac -d out src/main/java/ch/heigvd/dai/*.java src/main/java/ch/heigvd/dai/
 # Set the classpath to include the compiled classes
 ENV CLASSPATH /app/out
 
-# Run the application
-CMD ["java", "-jar", "target/java-tcp-programming-1.0-SNAPSHOT.jar", "client", "-H", "anonimous"]
+# Start the server
+CMD ["java", "-jar", "target/java-tcp-programming-1.0-SNAPSHOT.jar", "server"]
+
+# Start the game (client processed)
+CMD ["java", "-jar", "target/java-tcp-programming-1.0-SNAPSHOT.jar", "client", "--host", "localhost"]
