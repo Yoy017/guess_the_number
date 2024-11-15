@@ -53,16 +53,18 @@ public class Server implements Callable<Integer> {
         @Override
         public void run() {
             try (
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8)); BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+                    BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))
+                ) {
                 // Generate a random number to guess
                 int numberToGuess = (int) (Math.random() * (UPPERBOUND - LOWERBOUND + 1)) + LOWERBOUND;
-                out.write("Welcome to the number guessing game!");
-                out.write("Guess a number between " + LOWERBOUND + " and " + UPPERBOUND);
+                out.write("Welcome to the number guessing game!\nGuess a number between " + LOWERBOUND + " and " + UPPERBOUND + ": ");
 
                 String guess;
                 while ((guess = in.readLine()) != null) {
                     try {
                         int guessedNumber = Integer.parseInt(guess);
+                        System.out.println("[Client] " + guessedNumber);
                         if (guessedNumber < LOWERBOUND || guessedNumber > UPPERBOUND) {
                             out.write("Please guess a number within the range " + LOWERBOUND + " to " + UPPERBOUND);
                         } else if (guessedNumber < numberToGuess) {
@@ -70,8 +72,7 @@ public class Server implements Callable<Integer> {
                         } else if (guessedNumber > numberToGuess) {
                             out.write("Lower!");
                         } else if (guessedNumber == numberToGuess) {
-                            out.write("Congratulations! You've guessed the number.");
-                            out.write("Bye.");
+                            out.write("Congratulations! You've guessed the number, Bye.");
                             break;
                         }
                     } catch (NumberFormatException e) {

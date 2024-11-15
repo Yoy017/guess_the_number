@@ -30,27 +30,33 @@ public class Client implements Callable<Integer> {
     public Integer call() {
         System.out.println("Connecting to host " + host + " on port " + port);
         try (
-                Socket socket = new Socket(host, port); BufferedReader in
-                = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+                Socket socket = new Socket(host, port);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
-            ) {
+                BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));) {
             System.out.println("Connected successfully!");
 
             String serverOut, userIn, welcomeMessage;
 
             // Server communication
             welcomeMessage = in.readLine();
-            System.err.println(welcomeMessage);
+            System.out.println(welcomeMessage);
 
             while (!socket.isClosed()) {
-               
-                // User guess
-                userIn = in.readLine(); // stdin
+                // User input
+                userIn = stdIn.readLine();
+                System.out.println(userIn);
                 out.write(userIn + "\n");
                 out.flush();
 
+                // Server response
                 serverOut = in.readLine();
-                
+                System.out.println("[Server] " + serverOut);
+
+                if (serverOut.contains("Congratulations! You've guessed the number, Bye.")) {
+                    socket.close();
+                    continue;
+                }
             }
         } catch (IOException e) {
             System.out.println("Unable to connect to host " + host + " on port " + port);
