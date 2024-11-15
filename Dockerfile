@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy the JAR file into the container at /app
 COPY target/java-tcp-programming-1.0-SNAPSHOT.jar /app/java-tcp-programming-1.0-SNAPSHOT.jar
 
-# Start the server
-ENTRYPOINT ["java", "-jar", "/app/java-tcp-programming-1.0-SNAPSHOT.jar", "server"]
+# Expose the port 6433
+EXPOSE 6433
 
-# Launch the game process (client side)
-CMD ["java", "-jar", "/app/java-tcp-programming-1.0-SNAPSHOT.jar", "client", "-H", "localhost"]
+ENTRYPOINT ["java", "-jar", "/app/java-tcp-programming-1.0-SNAPSHOT.jar"]
+CMD ["server"]
